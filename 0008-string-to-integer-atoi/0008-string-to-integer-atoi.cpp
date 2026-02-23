@@ -4,24 +4,31 @@ public:
         
         int i = 0, n = s.size();
         
-        while(i < n && s[i] == ' ') i++;
+        // 1️⃣ Skip leading spaces
+        while(i < n && s[i] == ' ')
+            i++;
         
+        // 2️⃣ Handle sign
         int sign = 1;
         if(i < n && (s[i] == '+' || s[i] == '-')) {
             if(s[i] == '-') sign = -1;
             i++;
         }
         
-        int num = 0;
+        // 3️⃣ Convert digits
+        long num = 0;   // use long temporarily
         
         while(i < n && isdigit(s[i])) {
+            
             int digit = s[i] - '0';
-            
-            if(num > INT_MAX/10 || 
-               (num == INT_MAX/10 && digit > 7))
-                return sign == 1 ? INT_MAX : INT_MIN;
-            
             num = num * 10 + digit;
+            
+            // 4️⃣ Handle overflow
+            if(sign * num > INT_MAX)
+                return INT_MAX;
+            if(sign * num < INT_MIN)
+                return INT_MIN;
+            
             i++;
         }
         
